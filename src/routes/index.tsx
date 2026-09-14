@@ -5,7 +5,7 @@ import {
   Sparkles, Leaf, ShieldCheck, Zap, Heart,
   Package, Sun, Check, X, Star, Phone, Facebook, Instagram, MessageCircle,
   Clock, MapPin, Minus, Plus, Loader2, ChevronLeft, ChevronRight,
-  AlertTriangle, Truck, Award, Moon, Coffee, Info
+  AlertTriangle, Truck, Award, Moon, Coffee, Info, ArrowUpRight
 } from "lucide-react";
 import desertHeroImg from "@/assets/calmo-desert-hero.jpg";
 import infographicImg from "@/assets/calmo-infographic.jpg";
@@ -1018,7 +1018,7 @@ function Footer() {
   const { settings } = useStore();
   const c = settings?.content;
   return (
-    <footer className="relative bg-ink text-cream py-14 border-t border-gold/15 overflow-hidden">
+    <footer className="relative bg-ink text-cream pt-14 pb-32 md:pb-16 border-t border-gold/20 overflow-hidden">
       <div className="section-divider-sahara absolute top-0 left-0 right-0" />
       <img
         src={desertHeroImg}
@@ -1026,39 +1026,62 @@ function Footer() {
         aria-hidden="true"
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover opacity-15"
       />
-      <div className="absolute inset-0 bg-ink/88" />
-      <div className="absolute inset-0 bg-gradient-to-b from-sahara/5 via-transparent to-ink/30" />
-      <div className="relative container mx-auto px-4 text-center">
-        <div className="text-3xl font-black text-gold tracking-wider font-amiri">CALMO</div>
-        <p className="text-sm text-cream/80 italic mt-1 font-medium font-amiri">
+      <div className="absolute inset-0 bg-ink/90" />
+      <div className="absolute inset-0 bg-gradient-to-b from-sahara/10 via-transparent to-ink/50" />
+      <div className="relative container mx-auto px-5 text-center max-w-3xl">
+        <div className="text-3xl sm:text-4xl font-black text-gold tracking-wider font-amiri">CALMO</div>
+        <p className="text-sm sm:text-base text-cream/80 italic mt-1 font-medium font-amiri">
           {c?.footer_tagline || "حليفك الطبيعي للهضم والهدوء — Thé aux herbes"}
         </p>
-        <div className="flex items-center justify-center gap-2 mt-4 text-xs text-cream/70">
+        <div className="flex items-center justify-center gap-2.5 mt-4 text-xs text-cream/70 flex-wrap">
           <span>🇩🇿 صُنع بكل فخر في الجزائر</span>
-          <span>•</span>
+          <span className="text-gold/40">•</span>
           <span>معايير تصنيع BPF</span>
-          <span>•</span>
+          <span className="text-gold/40">•</span>
           <span>طبيعي 100%</span>
         </div>
-        <p className="text-xs text-cream/50 mt-6">
-          {c?.footer_copyright || "© 2026 CALMO. جميع الحقوق محفوظة."}
-        </p>
-        <div className="mt-4 pt-4 border-t border-cream/10 text-xs text-cream/60 flex items-center justify-center flex-wrap gap-2">
-          <span>تم عمل هذا الموقع بواسطة</span>
+
+        {/* Desert-inspired decorative divider */}
+        <div className="flex items-center justify-center gap-3 my-8 max-w-xs mx-auto">
+          <div className="h-px flex-1 bg-gradient-to-l from-gold/30 via-gold/15 to-transparent" />
+          <span className="text-gold/50 text-[10px]">◈</span>
+          <div className="h-px flex-1 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
+        </div>
+
+        {/* Dedicated Developer Attribution Signature Area */}
+        <div className="flex flex-col items-center justify-center space-y-2.5">
+          <p className="text-xs sm:text-sm text-cream/65 font-medium tracking-wide">
+            تم تصميم وتطوير هذا الموقع بواسطة
+          </p>
+
           <a
             href="https://ilyas-portfolio.carrd.co/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gold font-bold hover:text-gold/80 inline-flex items-center gap-1.5 transition-colors"
+            aria-label="معرض أعمال إلياس بدر الدين - مصمم ومطور الموقع"
+            className="group inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3.5 px-6 py-3 rounded-2xl bg-cream/[0.04] hover:bg-gold/[0.12] border border-gold/25 hover:border-gold/70 shadow-sm hover:shadow-sahara transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
-            <span>إلياس بدر الدين</span>
-            <span className="text-[11px] font-normal text-gold bg-gold/10 px-2 py-0.5 rounded-full border border-gold/30 hover:bg-gold/20 transition">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-base sm:text-lg font-black text-gold tracking-wide group-hover:text-gold transition-colors">
+                إلياس بدر الدين
+              </span>
+              <ArrowUpRight className="w-4 h-4 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+            </div>
+            <span className="hidden sm:inline text-gold/35 text-xs">•</span>
+            <span className="text-xs sm:text-sm font-semibold text-cream/85 group-hover:text-gold transition-colors border-b border-gold/30 group-hover:border-gold pb-0.5">
               معرض أعمالي ↗
             </span>
           </a>
         </div>
+
+        {/* Subtle separator before copyright */}
+        <div className="w-16 h-px bg-cream/10 mx-auto mt-7 mb-3.5" />
+
+        <p className="text-[11px] sm:text-xs text-cream/45">
+          {c?.footer_copyright || "© 2026 CALMO. جميع الحقوق محفوظة."}
+        </p>
       </div>
     </footer>
   );
