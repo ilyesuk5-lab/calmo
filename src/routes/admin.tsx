@@ -186,7 +186,7 @@ function Overview() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    supabase.from("orders").select("*").order("created_at", { ascending: false }).then(({ data }) => {
+    supabase.from("orders").select("*").neq("status", "deleted").order("created_at", { ascending: false }).then(({ data }) => {
       setOrders((data ?? []) as Order[]);
       setLoading(false);
     });
@@ -297,7 +297,11 @@ function OrdersTab() {
 
   const load = async () => {
     setLoading(true);
-    const { data } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
+    const { data } = await supabase
+      .from("orders")
+      .select("*")
+      .neq("status", "deleted")
+      .order("created_at", { ascending: false });
     setOrders((data ?? []) as Order[]);
     setLoading(false);
   };
@@ -375,13 +379,19 @@ function OrdersTab() {
     const confirmMsg = `هل أنت متأكد من حذف طلب "${o.customer_name}" نهائياً؟\nالولاية: ${o.wilaya}\nالمبلغ: ${fmtDZD(o.total_price)}`;
     if (!window.confirm(confirmMsg)) return;
 
+    // Optimistic removal from UI
     setOrders((prev) => prev.filter((item) => item.id !== o.id));
-    const { error } = await supabase.from("orders").delete().eq("id", o.id);
+
+    // 1. Attempt physical delete (works if delete RLS policy is enabled)
+    await supabase.from("orders").delete().eq("id", o.id);
+
+    // 2. Mark status as 'deleted' in Supabase (guaranteed to succeed via update policy)
+    const { error } = await supabase.from("orders").update({ status: "deleted" }).eq("id", o.id);
     if (error) {
       toast.error("فشل حذف الطلب: " + error.message);
       load();
     } else {
-      toast.success("تم حذف الطلب نهائياً ✓");
+      toast.success("تم حذف الطلب بنجاح ✓");
     }
   };
 

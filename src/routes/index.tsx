@@ -202,9 +202,8 @@ function Gallery() {
               alt={g.caption}
               loading="lazy"
               decoding="async"
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                i === idx ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === idx ? "opacity-100" : "opacity-0"
+                }`}
             />
           ))}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent p-5 md:p-8">
@@ -233,9 +232,8 @@ function Gallery() {
                 type="button"
                 aria-label={`صورة ${i + 1}`}
                 onClick={() => setIdx(i)}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === idx ? "w-6 bg-gold" : "w-1.5 bg-white/60"
-                }`}
+                className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-gold" : "w-1.5 bg-white/60"
+                  }`}
               />
             ))}
           </div>
@@ -294,9 +292,8 @@ function Benefits() {
             return (
               <div
                 key={b.title + i}
-                className={`p-6 md:p-8 rounded-3xl md:rounded-[2rem] border border-gold/20 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-sahara-lg ${
-                  i % 2 === 0 ? "bg-cream/95" : "bg-white/95 shadow-sahara"
-                }`}
+                className={`p-6 md:p-8 rounded-3xl md:rounded-[2rem] border border-gold/20 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-sahara-lg ${i % 2 === 0 ? "bg-cream/95" : "bg-white/95 shadow-sahara"
+                  }`}
               >
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-sahara/10 rounded-full blur-2xl pointer-events-none dust-shimmer" />
                 <div className="relative flex md:block items-start gap-4">
@@ -397,7 +394,7 @@ function HowToUse() {
   return (
     <section className="py-14 md:py-20 bg-sahara-warm sahara-pattern sahara-pattern-light relative">
       <div className="relative z-10 container mx-auto px-5">
-        <SectionHeader kicker="طريقة التحضير" title={c?.steps_title || "طريقة التحضير والاستمتاع في 4 خطوات"} />
+        <SectionHeader kicker="طريقة التحضير" title={c?.steps_title || "طريقة التحضير والاستعمال في 4 خطوات"} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 max-w-5xl mx-auto">
           {items.map((text, i) => {
             const Icon = STEP_ICONS[i % STEP_ICONS.length];
@@ -624,8 +621,8 @@ function OrderSection() {
     const orderId = data.id.slice(0, 8).toUpperCase();
 
     // Prepare WhatsApp Message
-    const waText = 
-`🌿 *طلب جديد — CALMO*
+    const waText =
+      `🌿 *طلب جديد — CALMO*
 ━━━━━━━━━━━━━━━━━━
 📦 *المنتج:* CALMO — Thé aux herbes
 🔢 *الكمية:* ${qty} علبة (20 كيس شاي / 50 غ)
@@ -710,9 +707,8 @@ ${form.notes.trim() ? `📝 *ملاحظات:* ${form.notes.trim()}\n` : ""}🤝 
                       key={item.q}
                       type="button"
                       onClick={() => setQty(item.q)}
-                      className={`rounded-2xl border-2 p-2.5 text-center transition cursor-pointer active:scale-95 flex flex-col justify-between ${
-                        active ? "border-gold bg-gold/10 shadow-sm" : "border-border bg-background hover:border-gold/50"
-                      }`}
+                      className={`rounded-2xl border-2 p-2.5 text-center transition cursor-pointer active:scale-95 flex flex-col justify-between ${active ? "border-gold bg-gold/10 shadow-sm" : "border-border bg-background hover:border-gold/50"
+                        }`}
                     >
                       <div className="text-[10px] font-bold text-gold">{item.badge}</div>
                       <div className="font-black text-sm md:text-base mt-1">{item.label}</div>
