@@ -1049,6 +1049,20 @@ function Footer() {
         <p className="text-xs text-cream/50 mt-6">
           {c?.footer_copyright || "© 2026 CALMO. جميع الحقوق محفوظة."}
         </p>
+        <div className="mt-4 pt-4 border-t border-cream/10 text-xs text-cream/60 flex items-center justify-center flex-wrap gap-2">
+          <span>تم عمل هذا الموقع بواسطة</span>
+          <a
+            href="https://ilyas-portfolio.carrd.co/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gold font-bold hover:text-gold/80 inline-flex items-center gap-1.5 transition-colors"
+          >
+            <span>إلياس بدر الدين</span>
+            <span className="text-[11px] font-normal text-gold bg-gold/10 px-2 py-0.5 rounded-full border border-gold/30 hover:bg-gold/20 transition">
+              معرض أعمالي ↗
+            </span>
+          </a>
+        </div>
       </div>
     </footer>
   );
