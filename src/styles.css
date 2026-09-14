@@ -1,0 +1,268 @@
+/* Google Fonts (Cairo + Amiri) loaded via <link> in __root.tsx head */
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@source "../src";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Cairo", system-ui, sans-serif;
+  --font-serif: "Amiri", serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ink: var(--ink);
+  --color-cream: var(--cream);
+  --color-sahara: var(--sahara);
+  --color-oasis: var(--oasis);
+  --color-sand-light: var(--sand-light);
+  --color-sand-dark: var(--sand-dark);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* CALMO Saharan brand palette */
+  --gold: oklch(0.78 0.12 75);             /* Warm Saharan gold #D4A853 */
+  --gold-soft: oklch(0.89 0.06 78);        /* Soft sandy gold */
+  --ink: oklch(0.16 0.02 50);              /* Warm dark brown-black #1E1710 */
+  --cream: oklch(0.96 0.018 80);           /* Sandy cream #F7F1E6 */
+  --sahara: oklch(0.65 0.15 55);           /* Earthy terracotta orange #C07A3E */
+  --oasis: oklch(0.55 0.10 155);           /* Muted oasis green #4A7C5C */
+  --sand-light: oklch(0.93 0.025 78);      /* Light warm sand */
+  --sand-dark: oklch(0.85 0.04 72);        /* Darker sand */
+
+  --background: var(--cream);
+  --foreground: var(--ink);
+  --card: oklch(0.98 0.012 78);
+  --card-foreground: var(--ink);
+  --popover: oklch(0.98 0.012 78);
+  --popover-foreground: var(--ink);
+  --primary: var(--gold);
+  --primary-foreground: var(--ink);
+  --secondary: var(--ink);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.93 0.015 78);
+  --muted-foreground: oklch(0.45 0.02 60);
+  --accent: var(--gold-soft);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0.02 75);
+  --input: oklch(0.88 0.02 75);
+  --ring: var(--gold);
+
+  --sidebar: var(--ink);
+  --sidebar-foreground: oklch(0.95 0.01 80);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: oklch(0.24 0.015 50);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.28 0.015 50);
+  --sidebar-ring: var(--gold);
+}
+
+.dark {
+  --background: var(--ink);
+  --foreground: var(--cream);
+  --card: oklch(0.20 0.015 50);
+  --card-foreground: var(--cream);
+  --popover: oklch(0.20 0.015 50);
+  --popover-foreground: var(--cream);
+  --primary: var(--gold);
+  --primary-foreground: var(--ink);
+  --secondary: oklch(0.26 0.015 50);
+  --secondary-foreground: var(--cream);
+  --muted: oklch(0.23 0.015 50);
+  --muted-foreground: oklch(0.70 0.02 78);
+  --accent: oklch(0.26 0.015 50);
+  --accent-foreground: var(--cream);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: var(--gold);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    font-family: "Cairo", system-ui, sans-serif;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: "Cairo", system-ui, sans-serif;
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+    position: relative;
+  }
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+}
+
+@layer utilities {
+  .text-gold { color: var(--gold); }
+  .bg-gold { background-color: var(--gold); }
+  .bg-ink { background-color: var(--ink); }
+  .text-ink { color: var(--ink); }
+  .bg-cream { background-color: var(--cream); }
+  .border-gold { border-color: var(--gold); }
+  .ring-gold { --tw-ring-color: var(--gold); }
+
+  /* Saharan palette utilities */
+  .text-sahara { color: var(--sahara); }
+  .bg-sahara { background-color: var(--sahara); }
+  .text-oasis { color: var(--oasis); }
+  .bg-oasis { background-color: var(--oasis); }
+  .bg-sand { background-color: var(--sand-light); }
+  .bg-sand-dark { background-color: var(--sand-dark); }
+  .border-sahara { border-color: var(--sahara); }
+  .font-amiri { font-family: "Amiri", serif; }
+
+  /* Saharan gradient backgrounds */
+  .bg-sahara-gradient {
+    background: linear-gradient(175deg, var(--cream) 0%, var(--sand-light) 40%, var(--sand-dark) 100%);
+  }
+  .bg-sahara-warm {
+    background: linear-gradient(180deg, oklch(0.95 0.02 78) 0%, oklch(0.92 0.03 75) 100%);
+  }
+  .bg-sahara-dark {
+    background: linear-gradient(175deg, oklch(0.18 0.025 50) 0%, oklch(0.13 0.02 45) 60%, oklch(0.10 0.015 40) 100%);
+  }
+
+  /* Arabic geometric pattern overlay */
+  .sahara-pattern {
+    position: relative;
+  }
+  .sahara-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23D4A853' stroke-width='0.8'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath d='M30 10L50 30L30 50L10 30Z'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+
+  /* Lighter pattern variant */
+  .sahara-pattern-light::before {
+    opacity: 0.03;
+  }
+
+  /* Saharan section divider */
+  .section-divider-sahara {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--sahara), var(--gold), transparent);
+    opacity: 0.3;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--sahara));
+    color: var(--ink);
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow:
+      0 8px 24px -8px color-mix(in oklab, var(--gold) 50%, transparent),
+      0 2px 8px -2px color-mix(in oklab, var(--sahara) 25%, transparent);
+  }
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 32px -10px color-mix(in oklab, var(--gold) 65%, transparent),
+      0 4px 12px -2px color-mix(in oklab, var(--sahara) 35%, transparent);
+  }
+
+  /* Warm golden card shadow */
+  .shadow-sahara {
+    box-shadow:
+      0 4px 16px -4px color-mix(in oklab, var(--gold) 20%, transparent),
+      0 1px 4px -1px color-mix(in oklab, var(--sahara) 10%, transparent);
+  }
+  .shadow-sahara-lg {
+    box-shadow:
+      0 8px 32px -8px color-mix(in oklab, var(--gold) 30%, transparent),
+      0 2px 8px -2px color-mix(in oklab, var(--sahara) 15%, transparent);
+  }
+
+  .pulse-ring {
+    animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 55%, transparent); }
+    50% { box-shadow: 0 0 0 14px color-mix(in oklab, var(--gold) 0%, transparent); }
+  }
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out both;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide-in-right {
+    animation: slideInRight 0.4s ease-out both;
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Dust shimmer — subtle golden particle-like animation */
+  .dust-shimmer {
+    animation: dustShimmer 8s ease-in-out infinite;
+  }
+  @keyframes dustShimmer {
+    0%, 100% { opacity: 0.03; transform: translateY(0) scale(1); }
+    50% { opacity: 0.07; transform: translateY(-6px) scale(1.02); }
+  }
+
+  /* Warm glow effect for hero elements */
+  .glow-sahara {
+    box-shadow: 0 0 40px 8px color-mix(in oklab, var(--gold) 25%, transparent);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
