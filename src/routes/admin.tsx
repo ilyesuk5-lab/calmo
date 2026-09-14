@@ -4,9 +4,11 @@ import { toast } from "sonner";
 import {
   LayoutDashboard, ShoppingBag, Settings as SettingsIcon, Tag,
   LogOut, Loader2, Search, Lock, FileText, Layers, Trash2, Plus, Home,
+  Pencil, X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useStore } from "@/lib/store-context";
+import { WILAYAS } from "@/lib/wilayas";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -284,6 +286,15 @@ function OrdersTab() {
   const [q, setQ] = useState("");
   const [statusF, setStatusF] = useState<string>("");
 
+  // Edit order modal state
+  const [editingOrder, setEditingOrder] = useState<Order | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editWilaya, setEditWilaya] = useState("");
+  const [editQuantity, setEditQuantity] = useState(1);
+  const [editTotalPrice, setEditTotalPrice] = useState(0);
+  const [savingEdit, setSavingEdit] = useState(false);
+
   const load = async () => {
     setLoading(true);
     const { data } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
@@ -310,6 +321,68 @@ function OrdersTab() {
     const { error } = await supabase.from("orders").update({ status }).eq("id", id);
     if (error) { toast.error("فشل التحديث"); load(); }
     else toast.success("تم تحديث الحالة ✓");
+  };
+
+  const openEdit = (o: Order) => {
+    setEditingOrder(o);
+    setEditName(o.customer_name);
+    setEditPhone(o.customer_phone);
+    setEditWilaya(o.wilaya);
+    setEditQuantity(o.quantity);
+    setEditTotalPrice(o.total_price);
+  };
+
+  const closeEdit = () => {
+    setEditingOrder(null);
+  };
+
+  const saveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingOrder) return;
+    if (!editName.trim()) {
+      toast.error("يرجى إدخال اسم العميل");
+      return;
+    }
+    if (!editPhone.trim()) {
+      toast.error("يرجى إدخال رقم الهاتف");
+      return;
+    }
+
+    setSavingEdit(true);
+    const updates = {
+      customer_name: editName.trim(),
+      customer_phone: editPhone.trim(),
+      wilaya: editWilaya,
+      quantity: editQuantity,
+      total_price: editTotalPrice,
+    };
+
+    const { error } = await supabase.from("orders").update(updates).eq("id", editingOrder.id);
+    setSavingEdit(false);
+
+    if (error) {
+      toast.error("فشل حفظ التعديلات: " + error.message);
+    } else {
+      setOrders((prev) =>
+        prev.map((o) => (o.id === editingOrder.id ? { ...o, ...updates } : o))
+      );
+      toast.success("تم تحديث بيانات الطلب بنجاح ✓");
+      setEditingOrder(null);
+    }
+  };
+
+  const deleteOrder = async (o: Order) => {
+    const confirmMsg = `هل أنت متأكد من حذف طلب "${o.customer_name}" نهائياً؟\nالولاية: ${o.wilaya}\nالمبلغ: ${fmtDZD(o.total_price)}`;
+    if (!window.confirm(confirmMsg)) return;
+
+    setOrders((prev) => prev.filter((item) => item.id !== o.id));
+    const { error } = await supabase.from("orders").delete().eq("id", o.id);
+    if (error) {
+      toast.error("فشل حذف الطلب: " + error.message);
+      load();
+    } else {
+      toast.success("تم حذف الطلب نهائياً ✓");
+    }
   };
 
   return (
@@ -350,6 +423,22 @@ function OrdersTab() {
                           className={`text-[11px] px-2 py-1 rounded-full border-0 font-medium ${STATUS_COLOR[o.status]}`}>
                     {STATUSES.map((s) => <option key={s} value={s}>{STATUS_AR[s]}</option>)}
                   </select>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => openEdit(o)}
+                      className="p-1.5 rounded-lg border border-gold/40 text-gold hover:bg-gold/15 transition cursor-pointer"
+                      title="تعديل بيانات الطلب"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => deleteOrder(o)}
+                      className="p-1.5 rounded-lg border border-destructive/40 text-destructive hover:bg-destructive/15 transition cursor-pointer"
+                      title="حذف الطلب نهائياً"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                   <span className="text-[10px] text-muted-foreground">{fmtDate(o.created_at)}</span>
                 </div>
               </div>
@@ -361,16 +450,22 @@ function OrdersTab() {
               <table className="w-full text-sm">
                 <thead className="bg-muted text-xs text-right">
                   <tr>
-                    <th className="p-3">الاسم</th><th className="p-3">الهاتف</th><th className="p-3">الولاية</th>
-                    <th className="p-3">الكمية</th><th className="p-3">الإجمالي</th><th className="p-3">كود الخصم</th>
-                    <th className="p-3">الحالة</th><th className="p-3">التاريخ</th>
+                    <th className="p-3">الاسم</th>
+                    <th className="p-3">الهاتف</th>
+                    <th className="p-3">الولاية</th>
+                    <th className="p-3">الكمية</th>
+                    <th className="p-3">الإجمالي</th>
+                    <th className="p-3">كود الخصم</th>
+                    <th className="p-3">الحالة</th>
+                    <th className="p-3">التاريخ</th>
+                    <th className="p-3 text-center">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((o) => (
                     <tr key={o.id} className="border-t hover:bg-muted/40">
                       <td className="p-3 font-medium">{o.customer_name}</td>
-                      <td className="p-3 text-muted-foreground">{o.customer_phone}</td>
+                      <td className="p-3 text-muted-foreground" dir="ltr">{o.customer_phone}</td>
                       <td className="p-3">{o.wilaya}</td>
                       <td className="p-3">{o.quantity}</td>
                       <td className="p-3 font-bold text-gold">{fmtDZD(o.total_price)}</td>
@@ -382,6 +477,24 @@ function OrdersTab() {
                         </select>
                       </td>
                       <td className="p-3 text-xs text-muted-foreground">{fmtDate(o.created_at)}</td>
+                      <td className="p-3">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            onClick={() => openEdit(o)}
+                            className="p-1.5 rounded-lg border border-gold/40 text-gold hover:bg-gold/15 transition cursor-pointer"
+                            title="تعديل بيانات الطلب"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => deleteOrder(o)}
+                            className="p-1.5 rounded-lg border border-destructive/40 text-destructive hover:bg-destructive/15 transition cursor-pointer"
+                            title="حذف الطلب نهائياً"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -389,6 +502,109 @@ function OrdersTab() {
             </div>
           </div>
         </>
+      )}
+
+      {/* Edit Order Modal */}
+      {editingOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-card border border-gold/30 rounded-3xl p-6 w-full max-w-md shadow-2xl relative space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="flex items-center gap-2 text-gold">
+                <Pencil className="w-5 h-5" />
+                <h3 className="font-black text-lg">تعديل بيانات الطلب</h3>
+              </div>
+              <button
+                onClick={closeEdit}
+                className="p-1.5 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={saveEdit} className="space-y-4 text-sm">
+              <div>
+                <label className="font-semibold block mb-1">اسم العميل *</label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="الاسم الكامل"
+                  className="w-full border rounded-xl px-3 py-2.5 bg-background text-sm focus:outline-none focus:border-gold"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold block mb-1">رقم الهاتف *</label>
+                <input
+                  type="tel"
+                  required
+                  dir="ltr"
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value)}
+                  placeholder="05 / 06 / 07 ..."
+                  className="w-full border rounded-xl px-3 py-2.5 bg-background text-sm text-right focus:outline-none focus:border-gold font-mono"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold block mb-1">الولاية</label>
+                  <select
+                    value={editWilaya}
+                    onChange={(e) => setEditWilaya(e.target.value)}
+                    className="w-full border rounded-xl px-3 py-2.5 bg-background text-sm focus:outline-none focus:border-gold"
+                  >
+                    {WILAYAS.map((w) => (
+                      <option key={w} value={w}>
+                        {w}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="font-semibold block mb-1">الكمية</label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={editQuantity}
+                    onChange={(e) => setEditQuantity(Math.max(1, +e.target.value))}
+                    className="w-full border rounded-xl px-3 py-2.5 bg-background text-sm focus:outline-none focus:border-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-semibold block mb-1">المبلغ الإجمالي (دج)</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={editTotalPrice}
+                  onChange={(e) => setEditTotalPrice(+e.target.value)}
+                  className="w-full border rounded-xl px-3 py-2.5 bg-background text-sm focus:outline-none focus:border-gold"
+                />
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="submit"
+                  disabled={savingEdit}
+                  className="btn-gold flex-1 rounded-xl py-2.5 font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                >
+                  {savingEdit && <Loader2 className="w-4 h-4 animate-spin" />}
+                  حفظ التعديلات
+                </button>
+                <button
+                  type="button"
+                  onClick={closeEdit}
+                  className="px-4 py-2.5 rounded-xl border hover:bg-muted font-medium transition cursor-pointer"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );
