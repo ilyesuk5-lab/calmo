@@ -9,18 +9,26 @@ import type { Database } from './types'
 export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server(
   async ({ next }) => {
     
-    const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
+    const DEFAULT_SUPABASE_URL = "https://deztxaqiyaigczeywkxr.supabase.co";
+    const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlenR4YXFpeWFpZ2N6ZXl3a3hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MjM5NzcsImV4cCI6MjA5NDQ5OTk3N30.EGiIqu_WEEadMOP_lVnGgl3WGBNFr9Cki3m3ARkUXE4";
 
-    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-      const missing = [
-        ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
-        ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
-      ];
-      const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
-      console.error(`[Supabase] ${message}`);
-      throw new Error(message);
-    }
+    const SUPABASE_URL =
+      process.env.SUPABASE_URL ||
+      process.env.VITE_SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.calmo_SUPABASE_URL ||
+      DEFAULT_SUPABASE_URL;
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      process.env.SUPABASE_PUBLISHABLE_KEY ||
+      process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.calmo_SUPABASE_ANON_KEY ||
+      process.env.calmo_SUPABASE_PUBLISHABLE_KEY ||
+      DEFAULT_SUPABASE_KEY;
+
     
     const request = getRequest();
 
