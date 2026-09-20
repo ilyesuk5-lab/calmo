@@ -623,7 +623,7 @@ function OrdersTab() {
 /* ---------- settings ---------- */
 function SettingsTab() {
   const { settings, updateLocal, refresh } = useStore();
-  const [price, setPrice] = useState(settings?.price ?? 2500);
+  const [price, setPrice] = useState(settings?.price ?? 1499);
   const [price30, setPrice30] = useState(settings?.price_30 ?? 1500);
   const [phone, setPhone] = useState(settings?.phone ?? "");
   const [fb, setFb] = useState(settings?.facebook_url ?? "");
@@ -647,7 +647,7 @@ function SettingsTab() {
     <div className="grid md:grid-cols-2 gap-5">
       <div className="bg-card border rounded-2xl p-5">
         <h3 className="font-bold mb-1">سعر العلبة الفردية (20 كيس شاي)</h3>
-        <p className="text-xs text-muted-foreground mb-3">السعر بالدينار الجزائري (افتراضي: 2500 دج)</p>
+        <p className="text-xs text-muted-foreground mb-3">السعر بالدينار الجزائري (افتراضي: 1499 دج)</p>
         <input type="number" value={price} onChange={(e) => setPrice(+e.target.value)}
                className="w-full border rounded-md px-3 py-2 bg-background" />
         <button onClick={() => save({ price }, "سعر العلبة")} className="btn-gold mt-3 rounded-md px-5 py-2">حفظ</button>

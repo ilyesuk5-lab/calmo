@@ -152,7 +152,7 @@ function Hero() {
               {c?.hero_description || "مزيج فاخر ومختار بعناية من الأعشاب الطبيعية 100% صُمم ليمنحك تجربة استرخاء فريدة وراحة تامة للقولون والجهاز الهضمي. خالٍ من الكافيين ومثالي لجميع أوقات اليوم وقبل النوم."}
             </p>
 
-            <div className="flex flex-wrap justify-center md:justify-start gap-1.5 md:gap-2 mb-8 md:mb-10">
+            <div className="flex flex-wrap justify-center md:justify-start gap-1.5 md:gap-2 mb-6 md:mb-8">
               {(c?.hero_badges && c.hero_badges.length > 0
                 ? c.hero_badges
                 : ["طبيعي 100%", "20 كيس شاي", "خالٍ من الكافيين", "صُنع في الجزائر 🇩🇿", "معايير BPF"]
@@ -161,6 +161,18 @@ function Hero() {
                   {t}
                 </span>
               ))}
+            </div>
+
+            {/* Nutritionist / Product Supervisor Credit Badge */}
+            <div className="flex justify-center md:justify-start mb-6">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 border border-gold/30 shadow-sahara backdrop-blur">
+                <div className="w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center border border-gold/35 shrink-0">
+                  <Award className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-xs sm:text-sm font-bold text-ink">
+                  مصنع من طرف أخصائي التغذية: <span className="font-black text-gold">أيوب لعمارة</span>
+                </span>
+              </div>
             </div>
 
             <button
@@ -317,15 +329,29 @@ function Benefits() {
 /* ---------- ingredients & product specs ---------- */
 const INGREDIENT_ICONS = [Sun, Leaf, Sparkles];
 const DEFAULT_INGREDIENTS = [
-  { name: "أزهار البابونج الذهبية", desc: "معروفة بخصائصها الفائقة في تهدئة الأعصاب ومقاومة التوتر والمساعدة على نوم هادئ." },
-  { name: "أوراق النعناع المنعش", desc: "تساعد بفعالية على تهدئة القولون وطرد الغازات وتسهيل عملية الهضم وتسكين المغص." },
-  { name: "توليفة الأعشاب المهدئة", desc: "مزيج متناغم ونقي 100% من الأعشاب الطبية الداعمة للراحة الهضمية والعصبية." },
+  {
+    name: "أعشاب صحراوية 100%",
+    desc: "مزيج عشبي طبيعي مستخلص من أعشاب صحراوية مختارة بعناية، بهوية طبيعية أصيلة.",
+  },
+  {
+    name: "منتجات زراعية جزائرية",
+    desc: "مكونات من منتجات زراعية جزائرية، يتم اختيارها بعناية للحفاظ على جودة المنتج وطبيعته.",
+  },
+  {
+    name: "أعشاب مثبتة الفعالية منذ القدم",
+    desc: "أعشاب طبيعية ذات استخدام تقليدي متوارث منذ القدم، ضمن تركيبة CALMO الخاصة.",
+  },
 ];
 
 function Ingredients() {
   const { settings } = useStore();
   const c = settings?.content;
-  const items = c?.ingredients && c.ingredients.length > 0 ? c.ingredients : DEFAULT_INGREDIENTS;
+  const rawItems = c?.ingredients && c.ingredients.length > 0 ? c.ingredients : DEFAULT_INGREDIENTS;
+  // Ensure no undisclosed specific ingredients are displayed
+  const items = rawItems.some((it) => it.name.includes("البابونج") || it.name.includes("النعناع"))
+    ? DEFAULT_INGREDIENTS
+    : rawItems;
+
   return (
     <section className="relative py-14 md:py-20 bg-card overflow-hidden">
       <div className="section-divider-sahara absolute top-0 left-0 right-0" />
@@ -340,9 +366,17 @@ function Ingredients() {
       <div className="absolute inset-0 bg-ink/75" />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-sahara/8 to-ink/80" />
       <div className="relative container mx-auto px-5 max-w-5xl">
-        <div className="text-center mb-8 md:mb-10">
+        <div className="text-center mb-6 md:mb-8">
           <div className="text-gold text-[10px] md:text-xs tracking-widest uppercase mb-2 font-black">المكونات والنقاء</div>
           <h2 className="text-2xl md:text-4xl font-black text-white">{c?.ingredients_title || "مكونات طبيعية 100% مختارة بعناية فائقة"}</h2>
+        </div>
+
+        {/* Nutritionist / Product Supervisor Credit Badge */}
+        <div className="max-w-md mx-auto mb-8 px-4 py-2.5 rounded-2xl bg-white/10 backdrop-blur-md border border-gold/30 shadow-sahara text-center flex items-center justify-center gap-2.5">
+          <Award className="w-4 h-4 text-gold shrink-0" />
+          <span className="text-xs md:text-sm font-bold text-white">
+            مصنع من طرف أخصائي التغذية: <span className="text-gold font-black">أيوب لعمارة</span>
+          </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto mb-10">
           {items.map((it, i) => {
@@ -554,13 +588,9 @@ function OrderSection() {
   } | null>(null);
 
   // Pricing rules for CALMO:
-  // Regular price: 2,500 DZD / box
-  // 3 boxes or more: 2,200 DZD / box
-  // 5 boxes or more: 2,000 DZD / box
-  const getUnitPrice = (q: number) => {
-    if (q >= 5) return 2000;
-    if (q >= 3) return 2200;
-    return settings?.price ?? 2500;
+  // Current regular price: 1,499 DZD / box
+  const getUnitPrice = (_q: number) => {
+    return settings?.price ?? 1499;
   };
 
   const unitPrice = getUnitPrice(qty);
@@ -688,18 +718,23 @@ ${form.notes.trim() ? `📝 *ملاحظات:* ${form.notes.trim()}\n` : ""}🤝 
                 </span>
                 <h3 className="text-xl md:text-2xl font-black">{c?.product_name || "CALMO — Thé aux herbes"}</h3>
                 <p className="text-xs md:text-sm text-muted-foreground">{c?.product_short_desc || "للهضم والاسترخاء التام"} — 50 غرام</p>
+                {/* Nutritionist Credit in product card */}
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gold/10 border border-gold/25 text-ink text-[11px] font-bold">
+                  <Award className="w-3.5 h-3.5 text-gold shrink-0" />
+                  <span>مصنع من طرف أخصائي التغذية: أيوب لعمارة</span>
+                </div>
                 <div className="mt-1 md:mt-3 text-2xl md:text-3xl font-black text-gold">{fmtDZD(unitPrice)} <span className="text-xs text-muted-foreground font-normal">/ للعلبة</span></div>
               </div>
             </div>
 
             {/* Pack offer selector */}
             <div className="mt-5">
-              <span className="text-sm font-semibold text-ink">عروض التوفير الخاصة:</span>
+              <span className="text-sm font-semibold text-ink">اختر الكمية:</span>
               <div className="grid grid-cols-3 gap-2 mt-2">
                 {[
-                  { q: 1, label: "علبة واحدة", badge: "تجربة", unit: 2500, save: null },
-                  { q: 3, label: "3 علب", badge: "الأكثر طلباً ⭐", unit: 2200, save: "وفر 900 دج" },
-                  { q: 5, label: "5 علب", badge: "عرض العائلة 🔥", unit: 2000, save: "وفر 2,500 دج" },
+                  { q: 1, label: "علبة واحدة", badge: "تجربة", unit: unitPrice, save: null },
+                  { q: 3, label: "3 علب", badge: "الأكثر طلباً ⭐", unit: unitPrice, save: null },
+                  { q: 5, label: "5 علب", badge: "عرض العائلة 🔥", unit: unitPrice, save: null },
                 ].map((item) => {
                   const active = qty === item.q;
                   return (
@@ -1089,7 +1124,7 @@ function Footer() {
 
 /* ---------- page ---------- */
 function LandingPage() {
-  const { loading } = useStore();
+  const { loading, settings } = useStore();
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -1121,7 +1156,7 @@ function LandingPage() {
           className="btn-gold w-full rounded-2xl py-3.5 text-base font-black flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
         >
           <Package className="w-5 h-5" />
-          اطلب CALMO الآن — 2,500 دج
+          اطلب CALMO الآن — {fmtDZD(settings?.price ?? 1499)}
         </button>
       </div>
     </main>

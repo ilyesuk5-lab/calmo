@@ -22,14 +22,14 @@ Name: VELUM
 Subtitle: تركيبة بريبيوتك ومضادات الأكسدة
 Description: مكمل غذائي فريد يجمع بين فاكهة التنين والرمان وبذور الكتان لدعم صحة الجهاز الهضمي والأمعاء. غني بمضادات الأكسدة والألياف الطبيعية.
 Details: 60 كبسولة • نباتي 100% • خالٍ من GMO • بريبيوتيك طبيعي
-Default Price: 2500 DZD
+Default Price: 1499 DZD
 
 === SUPABASE SETUP ===
 Create the following Supabase tables:
 
 1. TABLE: settings
    - id: integer (primary key, default 1)
-   - price: integer (default 2500)
+   - price: integer (default 1499)
    - phone: text (default '0555000000')
    - facebook_url: text (default 'https://facebook.com/velum')
    - instagram_url: text (default 'https://instagram.com/velum')
@@ -103,7 +103,7 @@ SECTION 9 — ORDER SECTION (id="order"):
 - Product card showing:
   - Product image
   - Name and description
-  - Price loaded live from Supabase settings table (formatted: "2500 دج")
+  - Price loaded live from Supabase settings table (formatted: "1499 دج")
   - Quantity selector (1–10) with + / - buttons
   - Promo code input field with "تطبيق" button
     → On submit: check against settings.promo_code (case-insensitive) and settings.promo_active
@@ -199,7 +199,7 @@ TAB 4 — PROMO CODE (كود الخصم):
 - No WhatsApp redirect for order form — orders go directly to Supabase
 
 === DEFAULT VALUES IN SUPABASE settings ROW (id=1) ===
-price: 2500
+price: 1499
 phone: "0555000000"
 facebook_url: "https://facebook.com/velum"
 instagram_url: "https://instagram.com/velum"
