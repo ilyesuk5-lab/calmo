@@ -588,9 +588,16 @@ function OrderSection() {
   } | null>(null);
 
   // Pricing rules for CALMO:
-  // Current regular price: 1,499 DZD / box
-  const getUnitPrice = (_q: number) => {
-    return settings?.price ?? 1499;
+  // 1–2 boxes: regular price (1,499 DZD / box, from settings)
+  // 3–4 boxes: 1,399 DZD / box (second offer)
+  // 5+ boxes : 1,299 DZD / box (third offer)
+  const basePrice = settings?.price ?? 1499;
+  const PRICE_3_BOXES = 1399;
+  const PRICE_5_BOXES = 1299;
+  const getUnitPrice = (q: number) => {
+    if (q >= 5) return PRICE_5_BOXES;
+    if (q >= 3) return PRICE_3_BOXES;
+    return basePrice;
   };
 
   const unitPrice = getUnitPrice(qty);
@@ -732,9 +739,9 @@ ${form.notes.trim() ? `📝 *ملاحظات:* ${form.notes.trim()}\n` : ""}🤝 
               <span className="text-sm font-semibold text-ink">اختر الكمية:</span>
               <div className="grid grid-cols-3 gap-2 mt-2">
                 {[
-                  { q: 1, label: "علبة واحدة", badge: "تجربة", unit: unitPrice, save: null },
-                  { q: 3, label: "3 علب", badge: "الأكثر طلباً ⭐", unit: unitPrice, save: null },
-                  { q: 5, label: "5 علب", badge: "عرض العائلة 🔥", unit: unitPrice, save: null },
+                  { q: 1, label: "علبة واحدة", badge: "تجربة", unit: getUnitPrice(1), save: null },
+                  { q: 3, label: "3 علب", badge: "الأكثر طلباً ⭐", unit: getUnitPrice(3), save: null },
+                  { q: 5, label: "5 علب", badge: "عرض العائلة 🔥", unit: getUnitPrice(5), save: null },
                 ].map((item) => {
                   const active = qty === item.q;
                   return (
